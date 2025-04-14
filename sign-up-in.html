@@ -329,7 +329,7 @@
               <i class='bx bxs-lock-alt'></i>
               <input type="password" placeholder="Password" />
             </div>
-            <button>Sign in</button>
+            <button onclick="handleSignIn()">Sign in</button>
             <p><b class="pointer" onclick="openPopup()">Forgot password?</b></p>
             <p>
               <span>Don't have an account?</span>
@@ -377,14 +377,28 @@
       container.classList.toggle('sign-in');
       container.classList.toggle('sign-up');
     }
-
+  
     function openPopup() {
       document.getElementById("popup").classList.remove("hidden");
     }
-
+  
     function closePopup() {
       document.getElementById("popup").classList.add("hidden");
     }
+  
+    function handleSignIn() {
+      // Normally you'd validate inputs and call an API here
+      const username = document.querySelector('.sign-in input[placeholder="Username"]').value;
+      const password = document.querySelector('.sign-in input[placeholder="Password"]').value;
+  
+      // Example dummy check
+      if (username === "admin" && password === "password123") {
+        window.location.href = "dashboard.html"; // or whatever your landing page is
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    }
   </script>
+  
 </body>
 </html>
