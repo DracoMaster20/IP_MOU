@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MOU Data Entry</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    :root {
+      --primary-color: #00F0FF;
+      --secondary-color: #7F00FF;
+      --bg-color: #0D0D2B;
+      --form-bg: rgba(25, 25, 60, 0.8);
+      --white: #fff;
+      --gray: #1f1f3c;
+      --error-color: #ff6b6b;
+    }
+
+    * {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0D0D2B, #1C1C3E, #3B00FF);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Background Bubbles */
+    .bubbles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.2);
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0) translateX(0);
+      }
+      25% {
+        transform: translateY(-20px) translateX(10px);
+      }
+      50% {
+        transform: translateY(0) translateX(20px);
+      }
+      75% {
+        transform: translateY(20px) translateX(10px);
+      }
+    }
+
+    header {
+      background-color: rgba(15, 15, 50, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+
+    header .btn {
+      background: none;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    header .btn:hover {
+      background: var(--primary-color);
+      color: var(--bg-color);
+    }
+
+    .form-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: var(--form-bg);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      color: var(--primary-color);
+      text-shadow: 0 0 10px var(--primary-color);
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--gray);
+      border: 1px solid var(--primary-color);
+      color: var(--white);
+      border-radius: 8px;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    input[type="file"] {
+      padding: 0.4rem;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .duration-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .duration-group select {
+      flex: 1;
+    }
+
+    .terms {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    .terms label {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .terms input[type="checkbox"] {
+      accent-color: var(--primary-color);
+      width: auto;
+      height: auto;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    .terms a {
+      color: var(--primary-color);
+      text-decoration: underline;
+      cursor: pointer;
+      display: inline;
+    }
+
+    .terms-error {
+      color: var(--error-color);
+      font-weight: bold;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .button-group button {
+      flex: 1;
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: var(--white);
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    }
+
+    .cancel-btn {
+      background-color: transparent;
+      border: 2px solid #FF5F5F;
+      color: #FF5F5F;
+    }
+
+    .cancel-btn:hover {
+      background-color: #FF5F5F;
+      color: var(--white);
+    }
+
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: var(--gray);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 0 25px rgba(0,255,255,0.3);
+    }
+
+    .modal-content h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .modal-content p {
+      line-height: 1.5;
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      background: var(--primary-color);
+      color: var(--bg-color);
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Bubbles -->
+  <div class="bubbles" id="bubbles"></div>
+
+  <header>
+    <button class="btn" onclick="goBack()"><i class='bx bx-arrow-back'></i> Back</button>
+    <button class="btn"><i class='bx bx-log-out'></i> Logout</button>
+  </header>
+
+  <div class="form-container">
+    <h2>MOU Data Entry</h2>
+    <form id="mouForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Industry/Institute Name</label>
+        <input type="text" name="institute_name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Mail ID of Industry/Company</label>
+        <input type="email" name="industry_email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Duration of MOU</label>
+        <div class="duration-group">
+          <select name="duration_years">
+            <option value="" disabled selected>Years</option>
+            <option>0</option><option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option>
+          </select>
+          <select name="duration_months">
+            <option value="" disabled selected>Months</option>
+            <option>0</option><option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option><option>7</option>
+            <option>8</option><option>9</option><option>10</option><option>11</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Signed Agreement Document</label>
+        <input type="file" name="agreement_document" required />
+      </div>
+
+      <div class="form-group">
+        <label>Faculty Name (who signed MOU)</label>
+        <input type="text" name="faculty_name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Mail ID of the Faculty</label>
+        <input type="email" name="faculty_email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Faculty Details involved</label>
+        <textarea name="faculty_details"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Academic Year</label>
+        <input type="number" name="academic_year" placeholder="e.g. 2025" min="2000" max="2099" step="1" required />
+      </div>
+
+      <div class="form-group">
+        <label>Purpose of MOU</label>
+        <textarea name="purpose"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Outcomes of MOU</label>
+        <textarea name="outcomes"></textarea>
+      </div>
+
+      <div class="terms">
+        <label>
+          <input type="checkbox" name="terms" required />
+          I have read and agree to the <a onclick="openModal()">Terms & Conditions</a>
+        </label>
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="submit-btn">Submit</button>
+        <button type="reset" class="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal -->
+  <div id="termsModal" class="modal">
+    <div class="modal-content">
+      <h3>Terms & Conditions</h3>
+      <p>
+        1. The information provided in this form is accurate to the best of your knowledge.<br><br>
+        2. All uploaded documents must be officially signed and verified.<br><br>
+        3. By submitting this form, you agree to abide by institutional policies and compliance protocols.<br><br>
+        4. MOU information entered will be reviewed before acceptance into the official records.<br><br>
+        5. Any misuse or false information may result in disciplinary action and permanent removal of access.<br><br>
+        6. This data may be accessed by authorized administrators and compliance teams for audit purposes.
+      </p>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+      // Function to generate bubbles
+      function generateBubbles() {
+          const bubblesContainer = document.getElementById('bubbles');
+          bubblesContainer.innerHTML = ''; // Clear existing bubbles
+
+          for (let i = 0; i < 20; i++) {
+              const bubble = document.createElement('div');
+              bubble.classList.add('bubble');
+
+              const size = Math.random() * 50 + 20; // Size between 20px and 70px
+              bubble.style.width = `${size}px`;
+              bubble.style.height = `${size}px`;
+
+              bubble.style.left = `${Math.random() * 100}%`;
+              bubble.style.top = `${Math.random() * 100}%`;
+
+              bubble.style.animationDuration = `${Math.random() * 10 + 5}s`; // Duration between 5s and 15s
+              bubble.style.animationDelay = `${Math.random() * 2}s`; // Delay between 0s and 2s
+
+              bubblesContainer.appendChild(bubble);
+          }
+      }
+
+      // Call the function to generate bubbles when the page loads
+      window.onload = generateBubbles;
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function openModal() {
+      document.getElementById("termsModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("termsModal").style.display = "none";
+    }
+
+    // Close modal if clicked outside content
+    window.onclick = function(event) {
+      const modal = document.getElementById("termsModal");
+      if (event.target === modal) modal.style.display = "none";
+    };
+  </script>
+
+</body>
+</html>
